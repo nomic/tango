@@ -1,12 +1,15 @@
 {
-  "name": "api-driver",
-  "version": "0.1.14",
-  "description": "a concise way to string together and test JSON API calls",
+  "name": "tango",
+  "version": "0.0.1",
+  "description": "Expressive, concise json api testing.",
   "keywords": [
+    "api",
     "http",
+    "test",
     "testing",
+    "behavior",
     "json",
-    "api"
+    "mocha"
   ],
   "main": "index.js",
   "scripts": {
@@ -14,14 +17,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nomic/api-driver.git"
+    "url": "https://github.com/nomic/tango.git"
   },
   "author": "Aaron Boyd",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nomic/api-driver/issues"
+    "url": "https://github.com/nomic/tango/issues"
   },
-  "homepage": "https://github.com/nomic/api-driver",
+  "homepage": "https://github.com/nomic/tango",
   "dependencies": {
     "bluebird": "2.1.3",
     "form-data": "0.1.0",
