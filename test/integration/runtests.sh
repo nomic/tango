@@ -5,6 +5,7 @@ export DUMMY_APP_PORT=3333;
 
 echo ""
 echo "## Launching dummy app"
+cd $SCRIPT_DIR/dummy_app && npm install && cd -
 node $SCRIPT_DIR/dummy_app/app > /dev/null &
 
 # wait for dummy app to come up
