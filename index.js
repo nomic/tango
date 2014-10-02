@@ -4,8 +4,10 @@ var _ = require('lodash'),
     context = require('./lib/context'),
     helper = require('./lib/helper');
 
-module.exports = _.extend({
-  run: run,
+module.exports = run;
+
+_.extend(run,
+{
   as: as,
   sequentially: sequentially,
   concurrently: concurrently,
