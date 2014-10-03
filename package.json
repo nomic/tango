@@ -1,6 +1,6 @@
 {
   "name": "tango",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Expressive, concise json api testing.",
   "keywords": [
     "api",

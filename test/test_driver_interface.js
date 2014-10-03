@@ -69,6 +69,13 @@ suite('Requests', function() {
           body: {url: (opts.rootUrl || "") + opts.relativeUrl}
         };
       }
+      if ('reflectHeaders' === urlParts[1]) {
+        console.log("OPTS", opts);
+        return {
+          statusCode: 200,
+          body: opts.headers
+        };
+      }
     });
   }
 
@@ -167,6 +174,20 @@ suite('Requests', function() {
       req
         .POST('/reflect', {nested: ':result'})
         .expect({ nested: 'bar' })
+    )(new tango.Context());
+  });
+
+  test('headers context function', function() {
+    return sequentially(
+      req
+        .POST('/reflect', {foo: 'bar'})
+        .stash('result'),
+      req
+        .POST('/reflectHeaders', {nested: ':result'})
+        .headers(function(ctx) {
+          return {'x-header': ctx.stash.get('result').foo};
+        })
+        .expect({ 'x-header': 'bar' })
     )(new tango.Context());
   });
 
