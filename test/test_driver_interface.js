@@ -4,12 +4,12 @@
 var chai = require('chai'),
   expect = chai.expect,
   Promise = require('bluebird'),
-  driver = require('../index'),
+  tango = require('../index'),
   request = require('request'),
-  ExpectationError = driver.ExpectationError,
-  step = driver.step, as = driver.as, req = driver.req,
-  sequentially = driver.sequentially, concurrently = driver.concurrently,
-  eventually = driver.eventually, wait = driver.wait;
+  ExpectationError = tango.ExpectationError,
+  step = tango.step, as = tango.as, req = tango.req,
+  sequentially = tango.sequentially, concurrently = tango.concurrently,
+  eventually = tango.eventually, wait = tango.wait;
 
 
 suite('Actors', function() {
@@ -21,7 +21,7 @@ suite('Actors', function() {
         expect(ctx.currentActor()).to.eql('mia');
         expect(ctx.jarForCurrentActor(request.jar)).to.be.a('Object');
       }
-    )(new driver.Context());
+    )(new tango.Context());
   });
 
   test('as, nested', function() {
@@ -36,7 +36,7 @@ suite('Actors', function() {
         expect(ctx.currentActor()).to.eql('mia');
         return ctx;
       }
-    )(new driver.Context())
+    )(new tango.Context())
     .then(function(ctx) {
       expect(ctx.currentActor()).to.equal(null);
     });
@@ -76,14 +76,14 @@ suite('Requests', function() {
     return req
       .GET('/status/204')
       .expect(204)
-      (new driver.Context());
+      (new tango.Context());
   });
 
   test('failing expectation', function() {
     return req
       .GET('/status/204')
       .expect(200)
-      (new driver.Context())
+      (new tango.Context())
       .catch(ExpectationError, function(err) {
         return err;
       });
@@ -94,7 +94,7 @@ suite('Requests', function() {
       .GET('/status/204')
       .expect(200)
       .expect(204)
-      (new driver.Context())
+      (new tango.Context())
       .catch(ExpectationError, function(err) {
         return err;
       });
@@ -104,14 +104,14 @@ suite('Requests', function() {
     return req
       .POST('/reflect', {foo: 'bar'})
       .expect({foo: 'bar'})
-      (new driver.Context());
+      (new tango.Context());
   });
 
   test('expectation on status and body', function() {
     return req
       .POST('/reflect', {foo: 'bar'})
       .expect(200, {foo: 'bar'})
-      (new driver.Context());
+      (new tango.Context());
   });
 
   test('expectation on fn', function() {
@@ -121,7 +121,7 @@ suite('Requests', function() {
         expect(res.statusCode).to.equal(200);
         expect(res.body).to.eql(body).to.eql({foo: 'bar'});
       })
-      (new driver.Context());
+      (new tango.Context());
   });
 
   test('expectation on status and fn', function() {
@@ -131,7 +131,7 @@ suite('Requests', function() {
         expect(res.statusCode).to.equal(200);
         expect(res.body).to.eql(body).to.eql({foo: 'bar'});
       })
-      (new driver.Context());
+      (new tango.Context());
   });
 
   test('stash', function() {
@@ -152,7 +152,7 @@ suite('Requests', function() {
           .expect({ url: '/reflectUrl/bar' })
       )
 
-    )(new driver.Context());
+    )(new tango.Context());
   });
 
   test('stash with scraping function', function() {
@@ -167,7 +167,7 @@ suite('Requests', function() {
       req
         .POST('/reflect', {nested: ':result'})
         .expect({ nested: 'bar' })
-    )(new driver.Context());
+    )(new tango.Context());
   });
 
 });
@@ -179,7 +179,7 @@ suite('Control Flow', function() {
       function(ctx) {ctx.counter = 1; return ctx;},
       function(ctx) {ctx.counter++; return ctx;},
       function(ctx) {expect(ctx.counter).to.equal(2); }
-    )(new driver.Context());
+    )(new tango.Context());
   });
 
   test('sequentially with array', function() {
@@ -188,7 +188,7 @@ suite('Control Flow', function() {
       function(ctx) {ctx.counter = 1; return ctx;},
       function(ctx) {ctx.counter++; return ctx;},
       function(ctx) {expect(ctx.counter).to.equal(2); }
-    ])(new driver.Context());
+    ])(new tango.Context());
   });
 
   test('steps', function() {
@@ -201,7 +201,7 @@ suite('Control Flow', function() {
         sequentially(
           function(ctx) {ctx.counter++; return ctx;},
           function(ctx) {expect(ctx.counter).to.equal(2); }))
-    )(new driver.Context());
+    )(new tango.Context());
   });
 
   test('concurrently', function() {
@@ -219,7 +219,7 @@ suite('Control Flow', function() {
           return ctx;
         });
       }
-    )(new driver.Context());
+    )(new tango.Context());
   });
 
   test('concurrently with array', function() {
@@ -227,7 +227,7 @@ suite('Control Flow', function() {
     return concurrently([
       function(ctx) { return ctx; },
       function(ctx) { return ctx; }
-    ])(new driver.Context());
+    ])(new tango.Context());
   });
 
   test('eventually', function() {
@@ -240,7 +240,7 @@ suite('Control Flow', function() {
         }
         return ctx;
       }
-    )(new driver.Context());
+    )(new tango.Context());
   });
 
   test('wait', function() {
@@ -252,7 +252,7 @@ suite('Control Flow', function() {
       function() {
         expect(Date.now() - start).is.gte(10);
       }
-    )(new driver.Context());
+    )(new tango.Context());
   });
 
 });
@@ -261,23 +261,23 @@ suite('Control Flow', function() {
 suite("Run", function() {
 
   test('Without context', function() {
-    return driver.run(function(ctx) {
+    return tango(function(ctx) {
       expect(ctx.currentActor).to.exist;
     });
   });
 
   test('With context', function() {
-    var ctx = new driver.Context();
+    var ctx = new tango.Context();
     ctx.state = true;
-    return driver.run(ctx, function(ctx) {
+    return tango(ctx, function(ctx) {
       expect(ctx.state).to.exist;
     });
   });
 
   test('With promise for context', function() {
-    var ctx = new driver.Context();
+    var ctx = new tango.Context();
     ctx.state = true;
-    return driver.run(Promise.resolve(ctx), function(ctx) {
+    return tango(Promise.resolve(ctx), function(ctx) {
       expect(ctx.state).to.exist;
     });
   });

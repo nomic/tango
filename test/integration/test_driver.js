@@ -1,12 +1,12 @@
 "use strict";
 /*global suite: false, test: false */
 
-var driver = require('../../index'),
-  as = driver.as, req = driver.req,
+var tango = require('../../index'),
+  as = tango.as, req = tango.req,
   request = require('request'),
   expect = require('chai').expect;
 
-suite("Driver Basics", function() {
+suite("tango Basics", function() {
   var endpoint = "http://localhost:3333";
 
   req = req
@@ -16,7 +16,7 @@ suite("Driver Basics", function() {
     });
 
   test("Check for 200 and body", function() {
-    return driver.run(
+    return tango(
       as('ella',
         req
           .GET('/')
@@ -27,7 +27,7 @@ suite("Driver Basics", function() {
   });
 
   test("Check a 404", function() {
-    return driver.run(
+    return tango(
       as('ella',
         req
           .GET('/bogus')
@@ -36,7 +36,7 @@ suite("Driver Basics", function() {
   });
 
   test("Actor cookie jar", function() {
-    return driver.run(
+    return tango(
       as('ella',
         req
           .POST('/reflect/cookie', {name: 'chocolate', value: 'chip'})
