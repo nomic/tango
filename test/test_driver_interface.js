@@ -70,7 +70,6 @@ suite('Requests', function() {
         };
       }
       if ('reflectHeaders' === urlParts[1]) {
-        console.log("OPTS", opts);
         return {
           statusCode: 200,
           body: opts.headers
