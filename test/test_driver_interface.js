@@ -286,25 +286,4 @@ suite("Run", function() {
     });
   });
 
-  test('With context', function() {
-    var ctx = new tango.Context();
-    ctx.state = true;
-    return tango(ctx, function(ctx) {
-      expect(ctx.state).to.exist;
-    });
-  });
-
-  test('With promise for context', function() {
-    var ctx = new tango.Context();
-    ctx.state = true;
-    return tango(Promise.resolve(ctx), function(ctx) {
-      expect(ctx.state).to.exist;
-    });
-  });
-
 });
-
-function assertIsACookieJar(obj) {
-  expect(obj.getCookieString).is.a('function');
-  expect(obj.setCookie).is.a('function');
-}

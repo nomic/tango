@@ -21,14 +21,8 @@ _.extend(run,
   require('./lib/req')
 );
 
-function run(/*[context], fn*/) {
-  if (_.isFunction(arguments[0])) {
-    return sequentially(_.toArray(arguments))(new context.Context());
-  }
-
-  var ctx = _.first(arguments);
-  var cmds = _.rest(arguments);
-  return Promise.cast(ctx).then(sequentially(cmds));
+function run(/*cmds...*/) {
+  return sequentially.apply(null, arguments)(new context.Context());
 }
 
 function as(alias /*, cmds* */) {
