@@ -141,7 +141,7 @@ function _untilResolved(fn, delay, timeout, report, elapsed) {
 }
 
 function _conformCommands(cmds) {
-  cmds = _.flatten(cmds);
+  cmds = _.flattenDeep(cmds);
   helper.validate(
     _.all(cmds, _.isFunction),
     'Driver commands must be functions: [' + cmds + ']'
