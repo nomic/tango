@@ -3,8 +3,8 @@
 
 var assert = require('assert'),
     expector = require('../lib/expector'),
-    cje = expector.test.checkJSONExpression,
-    expectFn = expector.test.expectFn,
+    cje = expector.checkJSONExpression,
+    expectFn = expector.expectFn,
     Promise = require("bluebird");
 
 
