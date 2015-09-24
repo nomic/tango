@@ -6,20 +6,26 @@ var _ = require('lodash'),
 
 module.exports = run;
 
-_.extend(run,
-{
-  as: as,
-  sequentially: sequentially,
-  concurrently: concurrently,
-  step: step,
-  stash: stash,
-  eventually: eventually,
-  wait: wait,
-  pass: pass
-},
+_.extend(
+  run,
+  {
+    runWithContext: runWithContext,
+    as: as,
+    sequentially: sequentially,
+    concurrently: concurrently,
+    step: step,
+    stash: stash,
+    eventually: eventually,
+    wait: wait,
+    pass: pass
+  },
   context,
   require('./lib/req')
 );
+
+function runWithContext(ctx /*, cmds...*/) {
+  return sequentially.apply(null, _.rest(arguments))(ctx);
+}
 
 function run(/*cmds...*/) {
   return sequentially.apply(null, arguments)(new context.Context());
