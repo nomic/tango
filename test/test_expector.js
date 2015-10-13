@@ -4,8 +4,7 @@
 var assert = require('assert'),
     expector = require('../lib/expector'),
     cje = expector.checkJSONExpression,
-    expectFn = expector.expectFn,
-    Promise = require("bluebird");
+    expectFn = expector.expectFn;
 
 
 suite('checkJSONExpresion', function() {
@@ -74,6 +73,24 @@ suite('checkJSONExpresion', function() {
     assert( !cje({a: {$not: "$exists"}}, {a: 1}) );
     assert(  cje({$not: {$unordered: [1, 2]}}, [1, 2, 3]) );
     assert( !cje({$not: {$unordered: [1, 2]}}, [2, 1]) );
+  });
+
+  test('strict', function() {
+    assert(  cje({a:1}, {a:1, b:2}, {strict: false}) );
+    assert( !cje({}, {a:1, b:2}, {strict: true}) );
+    assert( !cje({a:1}, {a:1, b:2}, {strict: true}) );
+    assert(  cje({a:1, b:2}, {a:1, b:2}, {strict: true}) );
+    assert(  cje('$exists', {a:1, b:2}, {strict: true}) );
+  });
+
+  test('strict + $not', function() {
+    assert(
+      cje(
+        {a:1, b:{ $not: {c:4} }},
+        {a:1, b:{ c:3, d:4}},
+        {strict: true}),
+      'strict does not mean a $not experession must reference every field'
+    );
   });
 
 });
